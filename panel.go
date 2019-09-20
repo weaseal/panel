@@ -120,7 +120,10 @@ func (panel *Panel) SetSaturation(saturation Saturation) error {
 	return nil
 }
 
-// Apply adjusts multiple settings in a single request
+// Apply adjusts multiple settings in a single request.
+// NOTE: As of firmware v1.5.0, the Canvas returns a 404 when multiple settings
+// are sent -- although it does actually succeed at applying the change.  Given
+// this bug, consider discarding the returned error here.
 func (panel *Panel) Apply(settings *StateSettings) error {
 
 	// if brightness is 0, only send that, otherwise the panel flickers
@@ -135,7 +138,7 @@ func (panel *Panel) Apply(settings *StateSettings) error {
 		settings.Temperature = nil
 	}
 
-	log.Debugf("Settings for SetSettings(): %+v", *settings)
+	log.Debugf("Settings for Apply(): %+v", *settings)
 	if err := panel.apiClient.state(settings).put(); err != nil {
 		return err
 	}
@@ -202,7 +205,9 @@ func (panel *Panel) SetAPIAddr(apiAddr string) error {
 
 // GetStateSettings returns the current state of the panel, omitting fields
 // which are not really in use, such as hue when the colour mode is temperature,
-// as they would fail to apply together.
+// as they would fail to apply together. This is somewhat buggy, as the returned
+// values are generally incorrect if the panel was configured by something other
+// than direct API calls, such as via mobile app.
 func (panel *Panel) GetStateSettings() (*StateSettings, error) {
 
 	settings := &StateSettings{}
@@ -228,6 +233,26 @@ func (panel *Panel) GetStateSettings() (*StateSettings, error) {
 	if *state.ColourMode == ColourModeHueSaturation {
 		settings.Hue = state.Hue
 		settings.Saturation = state.Saturation
+	}
+
+	log.Debug("got state:")
+	if settings.ColourMode != nil {
+		log.Debugf("colourmode: %v", state.ColourMode)
+	}
+	if settings.Hue != nil {
+		log.Debugf("hue: %v", settings.Hue.Value)
+	}
+	if settings.On != nil {
+		log.Debugf("on: %v", settings.On.Value)
+	}
+	if settings.Brightness != nil {
+		log.Debugf("brightness: %v", settings.Brightness.Value)
+	}
+	if settings.Saturation != nil {
+		log.Debugf("saturation: %v", settings.Saturation.Value)
+	}
+	if settings.Temperature != nil {
+		log.Debugf("temperature: %v", settings.Temperature.Value)
 	}
 
 	return settings, err

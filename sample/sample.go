@@ -69,6 +69,9 @@ func main() {
 	settings := &panel.StateSettings{}
 	settings.SetBrightness(20)
 	settings.SetSaturation(100)
+	// don't action any returned error from Apply(), due to a bug with Canvas. See
+	// the comment on the function definition for more information
+	p.Apply(settings)
 
 	// do a rainbow
 	for i := 0; i <= 20; i++ {

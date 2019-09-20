@@ -12,27 +12,27 @@ import (
 
 // state takes settings to be sent. Do not perform any logic here which could
 // error, because State cannot return an error, as it is a chained method.
-func (p PanelAPIClient) state(settings *StateSettings) panelRequest {
+func (p apiClient) state(settings *StateSettings) panelRequest {
 
 	settings.Validate()
 
 	request := panelRequest{
 		tokenizedAddress:                  fmt.Sprintf("%s/api/v1/%s/%s", p.apiAddr, p.token, APIPathState),
 		tokenizedAddressWithCensoredToken: fmt.Sprintf("%s/api/v1/%s/%s", p.apiAddr, "$token", APIPathState),
-		client: p.httpClient,
-		body:   settings,
+		client:                            p.httpClient,
+		body:                              settings,
 	}
 
 	return request
 }
 
 // newToken deals with credentials
-func (p PanelAPIClient) newToken() panelRequest {
+func (p apiClient) newToken() panelRequest {
 
 	request := panelRequest{
 		tokenizedAddress:                  fmt.Sprintf("%s/api/v1/%s", p.apiAddr, APIPathNew),
 		tokenizedAddressWithCensoredToken: fmt.Sprintf("%s/api/v1/%s", p.apiAddr, APIPathNew),
-		client: p.httpClient,
+		client:                            p.httpClient,
 	}
 
 	return request

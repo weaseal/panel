@@ -6,12 +6,12 @@ import (
 
 // Panel is a Nanoleaf panel
 type Panel struct {
-	Status    PanelStatus
-	apiClient PanelAPIClient
+	Status    status
+	apiClient apiClient
 }
 
 // PanelStatus contains known information about the panel's operation
-type PanelStatus struct {
+type status struct {
 	PowerState  PowerState
 	Brightness  Brightness
 	Temperature Temperature
@@ -19,8 +19,8 @@ type PanelStatus struct {
 	Saturation  Saturation
 }
 
-// PanelAPIClient sends requests to a panel
-type PanelAPIClient struct {
+// apiclient sends requests to a panel
+type apiClient struct {
 	apiAddr    string // "http://some.ip.and:port"
 	token      AuthToken
 	httpClient http.Client

@@ -1,6 +1,8 @@
 # Panel Library
 This is a golang API client library for interacting with Nanoleaf Canvas tiles.  See [sample.go](sample/sample.go) for usage examples.
 
+See GoDoc for detailed library documentation: https://godoc.org/github.com/weaseal/panel
+
 Currently, you can use this library to interact with the Canvas tile in the following ways:
 - toggle on/off
 - brightness

@@ -21,7 +21,7 @@ const (
 	MaximumBrightness Brightness = 100
 	// MinimumHue lowest possible Hue
 	MinimumHue Hue = 0
-	// MaximumHue lowest possible Hue
+	// MaximumHue highest possible Hue
 	MaximumHue Hue = 360
 	// MinimumSaturation lowest possible saturation
 	MinimumSaturation Saturation = 0
